@@ -1,0 +1,17 @@
+server:
+  port: 8484
+  servlet:
+    context-path: "/prova"
+
+spring:
+  datasource:
+    url: "jdbc:mysql://localhost:3306/provasecurity"
+    username: "root"
+    password: "root"
+    driver-class-name: "com.mysql.cj.jdbc.Driver"
+
+  jpa:
+    database-platform: "org.hibernate.dialect.MySQLDialect"
+    hibernate:
+      ddl-auto: update
+    generate-ddl: true
