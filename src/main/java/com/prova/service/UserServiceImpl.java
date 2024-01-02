@@ -42,6 +42,12 @@ public class UserServiceImpl implements UserService
     }
 
     @Override
+    public String deleteAllUser() {
+        userRepository.deleteAll();
+        return "Users deleted successfully";
+    }
+
+    @Override
     public String deleteUserById(Integer id)
     {
         if(userRepository.findById(id).isPresent())

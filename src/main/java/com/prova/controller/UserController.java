@@ -47,4 +47,10 @@ public class UserController
         return new ResponseEntity<String>(userService.deleteUserById(userId), HttpStatus.OK);
     }
 
+    @DeleteMapping("/deleteAllUsers")
+    public ResponseEntity<String> deleteAllUsers()
+    {
+        return new ResponseEntity<String>(userService.deleteAllUser(), HttpStatus.OK);
+    }
+
 }
