@@ -23,5 +23,7 @@ public interface UserService
 
     public User updateUser(UserDto userDto);
 
+    public String deleteAllUser();
+
     public String deleteUserById(Integer id);
 }
