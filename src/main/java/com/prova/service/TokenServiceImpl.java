@@ -18,31 +18,28 @@ public class TokenServiceImpl implements TokenSerivce
     @Autowired
     private JwtEncoder jwtEncoder;
 
-    @Autowired
-    private JwtDecoder jwtDecoder;
-
     @Override
     public String generateJwt(Authentication auth)
     {
         Instant now = Instant.now();
 
+
         String scope = auth.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.joining());
 
+        // set di claim
         JwtClaimsSet claims = JwtClaimsSet.builder()
                 //indica che questo back-end sta emettendo il token
                 .issuer("self")
-                //Con questo diciamo quando lo abbiamo emesso
+                //Con questo diciamo quando lo abbiamo emesso (istante di tempo)
                 .issuedAt(now)
                 //La persona verso la quale si dirige il JWt
                 .subject(auth.getName())
-                //informazioni contenute
+                //informazioni contenute, passa lo scope creato sopra
                 .claim("roles", scope)
                 .build();
-
-
-
+        // effettua la codifica utilizzando i valori del claim
         return jwtEncoder.encode(JwtEncoderParameters.from(claims)).getTokenValue();
 
     }

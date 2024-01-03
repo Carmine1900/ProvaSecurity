@@ -10,5 +10,6 @@ import java.util.Optional;
 @Repository
 public interface UserRepository extends JpaRepository<User,Integer>
 {
+    // Con Optional mi restituisce o l'oggetto User se viene trovato oppure, nel caso contrario, null
     public Optional<User> findByUsername(String username);
 }

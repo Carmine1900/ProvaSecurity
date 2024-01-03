@@ -35,20 +35,21 @@ public class SecurityConfig
 
     private RsaKeyProperties keys;
 
+    // Quando viene creata l'istanza di questa classe, genera in automatico la coppia di chiave (pubblica e privata)
     public SecurityConfig(RsaKeyProperties keysProperties)
     {
         this.keys = keysProperties;
     }
 
 
-    //Creo un bean he mi restituisce il password encoder
+    //Creo un bean he mi restituisce il password encoder: codifica password
     @Bean
     public PasswordEncoder passwordEncoder()
     {
         return new BCryptPasswordEncoder();
     }
 
-    //Creo un  gestore di autenticazione
+    //Creo un  gestore di autenticazione che viene richiamato nella classe UserServiceImpl
     @Bean
     public AuthenticationManager authManager(UserDetailsService detailsService)
     {
@@ -76,15 +77,10 @@ public class SecurityConfig
                     auth.anyRequest().authenticated();
                 });
 
-        http
-                .oauth2ResourceServer((rs) -> rs.jwt((jwt) -> jwt.jwtAuthenticationConverter(jwtAuthenticationConverter())));
-
-
-        http
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+        http.oauth2ResourceServer((rs) -> rs.jwt((jwt) -> jwt.jwtAuthenticationConverter(jwtAuthenticationConverter())));
+        http.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
         return http.build();
-
     }
 
 
@@ -103,20 +99,26 @@ public class SecurityConfig
         return new NimbusJwtEncoder(jwkSource);
     }
 
-
     @Bean
     public JwtAuthenticationConverter jwtAuthenticationConverter()
     {
+        // Questo oggetto crea un convertitore che sarà responsabile della conversione delle autorizzazioni (ruoli)
+        // presenti nel token JWT.
         JwtGrantedAuthoritiesConverter jwtGrantedAuthoritiesConverter = new JwtGrantedAuthoritiesConverter();
+        // Configurazioni convertitore
+        jwtGrantedAuthoritiesConverter.setAuthoritiesClaimName("roles"); // Qui si sta configurando il convertitore per estrarre le autorizzazioni (ruoli) dal campo "roles" del token JWT.
+        jwtGrantedAuthoritiesConverter.setAuthorityPrefix("ROLE_"); // Inoltre, viene specificato un prefisso "ROLE_" che verrà aggiunto a ciascuna autorizzazione estratta. Ad esempio, se il ruolo nel token è "ADMIN", diventerà "ROLE_ADMIN".
 
-        jwtGrantedAuthoritiesConverter.setAuthoritiesClaimName("roles");
-        jwtGrantedAuthoritiesConverter.setAuthorityPrefix("ROLE_");
-
+        // Viene creato un convertitore aggiuntivo che sarà responsabile della conversione dell'intero token JWT in un oggetto di autenticazione.
         JwtAuthenticationConverter jwtConverter = new JwtAuthenticationConverter();
+
+        // Invoco il metodo setJwtGrantedAuthoritiesConverter dell'oggetto jwtConverter per settare l'oggetto creato (jwtGrantedAuthoritiesConverter):
+        // si imposta il convertitore JwtGrantedAuthoritiesConverter precedentemente configurato all'interno del
+        // JwtAuthenticationConverter.
+        // Questo indica che durante il processo di autenticazione, le autorizzazioni (ruoli) saranno estratte dal token
+        // JWT utilizzando il JwtGrantedAuthoritiesConverter.
         jwtConverter.setJwtGrantedAuthoritiesConverter(jwtGrantedAuthoritiesConverter);
         return jwtConverter;
-
-
     }
 
 }

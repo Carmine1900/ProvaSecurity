@@ -65,6 +65,7 @@ public class UserServiceImpl implements UserService, UserDetailsService
     @Override
     public User saveUser(UserDto userDto)
     {
+        // Prendo l'oggetto bean della classe SecurityConfig e vado a codificare la password
         String password = passwordEncoder.encode(userDto.getPassword());
 
         User user = this.toClass(userDto);
@@ -121,14 +122,19 @@ public class UserServiceImpl implements UserService, UserDetailsService
     {
         try
         {
+            // In base ai dati che riceve, permette di generare il token
+            // Questa riga genera un'exception
             Authentication auht = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(loginAccessDto.getUsername(), loginAccessDto.getPassword())
             );
 
+            // genera il token in base all'oggetto auth
             String token = tokenSerivce.generateJwt(auht);
 
+            // Trova l'utente nel db in base all'username, se lo trova mi va a prendere col metodo get() l'utente.
             User user = userRepository.findByUsername(loginAccessDto.getUsername()).get();
             user.getRuolo().setUsersList(null);
+            // mi restituisce l'oggetto login con user e token
             return new LoginResponseDto(user,token);
 
         }catch(AuthenticationException authException)
