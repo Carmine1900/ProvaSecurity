@@ -1,5 +1,7 @@
 package com.prova.service;
 
+import com.prova.dto.LoginAccessDto;
+import com.prova.dto.LoginResponseDto;
 import com.prova.dto.UserDto;
 import com.prova.model.User;
 
@@ -12,6 +14,8 @@ public interface UserService
     public UserDto toDto(User user);
 
     public List<UserDto> findAll();
+
+    public LoginResponseDto loginUser(LoginAccessDto loginAccessDto);
 
     public UserDto findUserById(Integer id);
 

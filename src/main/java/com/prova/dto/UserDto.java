@@ -1,5 +1,6 @@
 package com.prova.dto;
 
+import com.prova.model.Ruolo;
 import jakarta.persistence.Column;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -17,4 +18,10 @@ public class UserDto
     private String nome;
 
     private String cognome;
+
+    private String username;
+
+    private String password;
+
+    private Ruolo ruolo;
 }

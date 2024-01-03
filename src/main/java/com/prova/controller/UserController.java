@@ -1,5 +1,7 @@
 package com.prova.controller;
 
+import com.prova.dto.LoginAccessDto;
+import com.prova.dto.LoginResponseDto;
 import com.prova.dto.UserDto;
 import com.prova.model.User;
 import com.prova.service.UserService;
@@ -29,10 +31,16 @@ public class UserController
         return new ResponseEntity<UserDto>(userService.findUserById(id), HttpStatus.OK);
     }
 
-    @PostMapping("/saveUser")
+    @PostMapping("/registerUser")
     public ResponseEntity<User> saveUser(@RequestBody UserDto userDto)
     {
         return new ResponseEntity<User>(userService.saveUser(userDto),HttpStatus.OK);
+    }
+
+    @PostMapping("/loginUser")
+    public ResponseEntity<LoginResponseDto> loginUser(@RequestBody LoginAccessDto loginAccessDto)
+    {
+        return new ResponseEntity<LoginResponseDto>(userService.loginUser(loginAccessDto),HttpStatus.OK);
     }
 
     @PutMapping("/updateUser")

@@ -19,18 +19,34 @@
 CREATE DATABASE IF NOT EXISTS `provasecurity` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
 USE `provasecurity`;
 
+-- Dump della struttura di tabella provasecurity.ruoli
+CREATE TABLE IF NOT EXISTS `ruoli` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `authority` varchar(30) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- Dump dei dati della tabella provasecurity.ruoli: ~2 rows (circa)
+INSERT INTO `ruoli` (`id`, `authority`) VALUES
+	(1, 'admin'),
+	(2, 'user');
+
 -- Dump della struttura di tabella provasecurity.users
 CREATE TABLE IF NOT EXISTS `users` (
   `id` int NOT NULL AUTO_INCREMENT,
   `nome` tinytext,
   `cognome` tinytext,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `username` varchar(200) DEFAULT NULL,
+  `password` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `id_ruolo` int DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk_id_ruolo` (`id_ruolo`),
+  CONSTRAINT `fk_id_ruolo` FOREIGN KEY (`id_ruolo`) REFERENCES `ruoli` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Dump dei dati della tabella provasecurity.users: ~2 rows (circa)
-INSERT INTO `users` (`id`, `nome`, `cognome`) VALUES
-	(2, 'Dario', 'Balzamo'),
-	(5, 'Carmine', 'Armenante');
+-- Dump dei dati della tabella provasecurity.users: ~1 rows (circa)
+INSERT INTO `users` (`id`, `nome`, `cognome`, `username`, `password`, `id_ruolo`) VALUES
+	(8, 'Andrea', 'Izzo', 'gioia', '$2a$10$1LdcryeCkLm4BK6aKcYyTOnq2C7UY7MZwmlFaiOwlIpmwRylQwgRu', 1);
 
 /*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
