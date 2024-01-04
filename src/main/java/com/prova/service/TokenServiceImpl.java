@@ -10,6 +10,8 @@ import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
+import java.time.temporal.ChronoUnit;
+import java.util.Date;
 import java.util.stream.Collectors;
 
 @Service
@@ -22,7 +24,7 @@ public class TokenServiceImpl implements TokenSerivce
     public String generateJwt(Authentication auth)
     {
         Instant now = Instant.now();
-
+        Instant expirationTime = now.plus(24,ChronoUnit.HOURS);
 
         String scope = auth.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
@@ -34,6 +36,7 @@ public class TokenServiceImpl implements TokenSerivce
                 .issuer("self")
                 //Con questo diciamo quando lo abbiamo emesso (istante di tempo)
                 .issuedAt(now)
+                .expiresAt(expirationTime)
                 //La persona verso la quale si dirige il JWt
                 .subject(auth.getName())
                 //informazioni contenute, passa lo scope creato sopra
