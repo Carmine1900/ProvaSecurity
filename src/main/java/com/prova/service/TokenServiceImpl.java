@@ -36,6 +36,7 @@ public class TokenServiceImpl implements TokenSerivce
                 .issuer("self")
                 //Con questo diciamo quando lo abbiamo emesso (istante di tempo)
                 .issuedAt(now)
+                //Qui stabiliamo la data di scadenza del token
                 .expiresAt(expirationTime)
                 //La persona verso la quale si dirige il JWt
                 .subject(auth.getName())

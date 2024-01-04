@@ -59,7 +59,9 @@ public class UserServiceImpl implements UserService, UserDetailsService
 
     @Override
     public UserDto findUserById(Integer id) {
-        return this.toDto(userRepository.findById(id).orElseThrow());
+        UserDto userDto = this.toDto(userRepository.findById(id).orElseThrow());
+        userDto.getRuolo().setUsersList(null);
+        return userDto;
     }
 
     @Override
