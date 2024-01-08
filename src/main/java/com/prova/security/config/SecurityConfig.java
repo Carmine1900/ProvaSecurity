@@ -7,6 +7,7 @@ import com.nimbusds.jose.jwk.RSAKey;
 import com.nimbusds.jose.jwk.source.ImmutableJWKSet;
 import com.nimbusds.jose.jwk.source.JWKSource;
 import com.nimbusds.jose.proc.SecurityContext;
+import com.prova.security.filter.FilterInternalToken;
 import com.prova.security.key.RsaKeyProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -26,6 +27,7 @@ import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 //Creo una classe di configurazione della sicurezza aggiunendo l'annotazione sottostante
 @Configuration
@@ -41,6 +43,13 @@ public class SecurityConfig
         this.keys = keysProperties;
     }
 
+    
+    //Bean per il filtro interno
+//    @Bean
+//    public FilterInternalToken filterInternal()
+//    {
+//    	return new FilterInternalToken();
+//    }
 
     //Creo un bean he mi restituisce il password encoder: codifica password
     @Bean
@@ -78,8 +87,11 @@ public class SecurityConfig
                 });
 
         http.oauth2ResourceServer((rs) -> rs.jwt((jwt) -> jwt.jwtAuthenticationConverter(jwtAuthenticationConverter())));
+        
         http.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
+//        http.addFilterBefore(filterInternal(), UsernamePasswordAuthenticationFilter.class);
+      
         return http.build();
     }
 

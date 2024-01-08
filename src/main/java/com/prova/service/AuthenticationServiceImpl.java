@@ -61,6 +61,7 @@ public class AuthenticationServiceImpl implements AuthenticationService
             ResponseCookie responseCookie = jwtCookie.generateJwtCookie(auth);
 
             response.addHeader(HttpHeaders.SET_COOKIE, responseCookie.toString());
+            
 
             // Trova l'utente nel db in base all'username, se lo trova mi va a prendere col metodo get() l'utente.
             User user = userRepository.findByUsername(loginAccessDto.getUsername()).get();
