@@ -15,11 +15,9 @@ public interface UserService
 
     public List<UserDto> findAll();
 
-    public LoginResponseDto loginUser(LoginAccessDto loginAccessDto);
 
     public UserDto findUserById(Integer id);
 
-    public User saveUser(UserDto userDto);
 
     public User updateUser(UserDto userDto);
 

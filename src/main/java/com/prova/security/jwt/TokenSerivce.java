@@ -1,4 +1,4 @@
-package com.prova.service;
+package com.prova.security.jwt;
 
 import org.springframework.security.core.Authentication;
 

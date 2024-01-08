@@ -31,18 +31,6 @@ public class UserController
         return new ResponseEntity<UserDto>(userService.findUserById(id), HttpStatus.OK);
     }
 
-    @PostMapping("/registerUser")
-    public ResponseEntity<User> saveUser(@RequestBody UserDto userDto)
-    {
-        return new ResponseEntity<User>(userService.saveUser(userDto),HttpStatus.OK);
-    }
-
-    @PostMapping("/loginUser")
-    public ResponseEntity<LoginResponseDto> loginUser(@RequestBody LoginAccessDto loginAccessDto)
-    {
-        return new ResponseEntity<LoginResponseDto>(userService.loginUser(loginAccessDto),HttpStatus.OK);
-    }
-
     @PutMapping("/updateUser")
     public ResponseEntity<User> updateUser(@RequestBody UserDto userDto)
     {

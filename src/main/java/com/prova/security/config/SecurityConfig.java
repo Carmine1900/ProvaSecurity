@@ -1,4 +1,4 @@
-package com.prova.security;
+package com.prova.security.config;
 
 
 import com.nimbusds.jose.jwk.JWK;
@@ -7,7 +7,7 @@ import com.nimbusds.jose.jwk.RSAKey;
 import com.nimbusds.jose.jwk.source.ImmutableJWKSet;
 import com.nimbusds.jose.jwk.source.JWKSource;
 import com.nimbusds.jose.proc.SecurityContext;
-import com.prova.key.RsaKeyProperties;
+import com.prova.security.key.RsaKeyProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -70,8 +70,8 @@ public class SecurityConfig
                 .csrf(csfr -> csfr.disable())
                 //Definisco quali rihcieste debbano essere autenticate e quali no sempre tramite un espressione lambda
                 .authorizeHttpRequests(auth -> {
-                    auth.requestMatchers("user/registerUser").permitAll();
-                    auth.requestMatchers("user/loginUser").permitAll();
+                    auth.requestMatchers("auth/registerUser").permitAll();
+                    auth.requestMatchers("auth/loginUser").permitAll();
 	//				auth.requestMatchers("user/findAll").hasRole("admin");
 	//	            auth.requestMatchers("user/deleteUser").hasRole("user");
                     auth.anyRequest().authenticated();

@@ -1,4 +1,4 @@
-package com.prova.key;
+package com.prova.security.key;
 
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;

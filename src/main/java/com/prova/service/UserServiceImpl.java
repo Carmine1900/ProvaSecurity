@@ -5,6 +5,7 @@ import com.prova.dto.LoginResponseDto;
 import com.prova.dto.UserDto;
 import com.prova.model.User;
 import com.prova.repository.UserRepository;
+import com.prova.security.jwt.TokenSerivce;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -19,8 +20,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements UserService, UserDetailsService
@@ -30,15 +29,6 @@ public class UserServiceImpl implements UserService, UserDetailsService
 
     @Autowired
     private ModelMapper modelMapper;
-
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-
-    @Autowired
-    private AuthenticationManager authenticationManager;
-
-    @Autowired
-    private TokenSerivce tokenSerivce;
 
     @Override
     public List<UserDto> findAll() {
@@ -64,16 +54,6 @@ public class UserServiceImpl implements UserService, UserDetailsService
         return userDto;
     }
 
-    @Override
-    public User saveUser(UserDto userDto)
-    {
-        // Prendo l'oggetto bean della classe SecurityConfig e vado a codificare la password
-        String password = passwordEncoder.encode(userDto.getPassword());
-
-        User user = this.toClass(userDto);
-        user.setPassword(password);
-        return userRepository.save(user);
-    }
 
     @Override
     public User updateUser(UserDto userDto)
@@ -119,29 +99,5 @@ public class UserServiceImpl implements UserService, UserDetailsService
     }
 
 
-    @Override
-    public LoginResponseDto loginUser(LoginAccessDto loginAccessDto)
-    {
-        try
-        {
-            // In base ai dati che riceve, permette di generare il token
-            // Questa riga genera un'exception
-            Authentication auht = authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(loginAccessDto.getUsername(), loginAccessDto.getPassword())
-            );
 
-            // genera il token in base all'oggetto auth
-            String token = tokenSerivce.generateJwt(auht);
-
-            // Trova l'utente nel db in base all'username, se lo trova mi va a prendere col metodo get() l'utente.
-            User user = userRepository.findByUsername(loginAccessDto.getUsername()).get();
-            user.getRuolo().setUsersList(null);
-            // mi restituisce l'oggetto login con user e token
-            return new LoginResponseDto(user,token);
-
-        }catch(AuthenticationException authException)
-        {
-            return new LoginResponseDto(null, "");
-        }
-    }
 }

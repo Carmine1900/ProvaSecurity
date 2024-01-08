@@ -1,5 +1,6 @@
-package com.prova.key;
+package com.prova.security.key;
 
+import com.prova.security.key.KeyGenerator;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.stereotype.Component;
